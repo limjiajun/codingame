@@ -55,49 +55,57 @@ class Solution
 {
     static void Main(string[] args)
     {
-        // Step 1: Read the number of rows
-        int n = int.Parse(Console.ReadLine());
+        // Step 1: Read the number of rows (height of the graphic)
+        int n = int.Parse(Console.ReadLine()); 
 
-        // Step 2: List to store decoded rows
-        var rows = new List<string>();
+        // Step 2: Prepare a list to store the decoded rows
+        List<string> rows = new List<string>();
 
-        // Step 3: Track length of first row to check rectangle
-        int? rowLength = null;
+        // Step 3: Variable to store the length of the first row
+        // This ensures all rows have the same length
+        int rowLength = -1;
 
-        // Step 4: Loop through each encoded line
+        // Step 4: Loop over each row input
         for (int i = 0; i < n; i++)
         {
+            // Step 4a: Read the encoded numbers for this row and split by space
             string[] parts = Console.ReadLine().Split(' ');
+
+            // Step 4b: Variable to build the decoded row
             string row = "";
 
-            // Step 4a: Decode the line by repeating '.' and 'O'
-            for (int j = 0; j < parts.Length; j++)
+            // Step 4c: Start with '.' as the first color (white)
+            char current = '.';
+
+            // Step 4d: Loop through each number in the row
+            foreach (string part in parts)
             {
-                int count = int.Parse(parts[j]);
-                char ch = (j % 2 == 0) ? '.' : 'O';
-                row += new string(ch, count);
+                int count = int.Parse(part); // Convert string to integer
+
+                // Repeat the current color 'count' times
+                for (int j = 0; j < count; j++)
+                    row += current;
+
+                // Switch color for the next segment
+                current = (current == '.') ? 'O' : '.';
             }
 
-            // Step 4b: Check all rows are same length
-            if (rowLength == null)
-            {
-                rowLength = row.Length;
-            }
+            // Step 4e: Check if all rows have the same length
+            if (rowLength == -1)
+                rowLength = row.Length; // First row sets the reference length
             else if (row.Length != rowLength)
             {
                 Console.WriteLine("INVALID");
-                return;
+                return; // Exit program if inconsistent length
             }
 
-            // Step 4c: Add decoded row to list
+            // Step 4f: Add the decoded row to the list
             rows.Add(row);
         }
 
-        // Step 5: Print all rows
-        foreach (var r in rows)
-        {
+        // Step 5: Print all decoded rows
+        foreach (string r in rows)
             Console.WriteLine(r);
-        }
     }
 }
 ```
